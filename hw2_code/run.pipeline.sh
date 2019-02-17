@@ -34,9 +34,9 @@ if [ "$PREPROCESSING" = true ] ; then
     # steps only needed once
     video_path=~/11775_videos/video  # path to the directory containing all the videos.
     mkdir -p list downsampled_videos surf cnn kmeans  # create folders to save features
-    awk '{print $1}' /home/ubuntu/11775hw1/hw1_code/list/train > list/train.video  # save only video names in one file (keeping first column)
-    awk '{print $1}' /home/ubuntu/11775hw1/hw1_code/list/val > list/val.video
-    cat list/train.video list/val.video list/test.video > list/all.video    #save all video names in one file
+    # awk '{print $1}' /home/ubuntu/11775hw1/hw1_code/list/train > list/train.video  # save only video names in one file (keeping first column)
+    # awk '{print $1}' /home/ubuntu/11775hw1/hw1_code/list/val > list/val.video
+    # cat list/train.video list/val.video list/test.video > list/all.video    #save all video names in one file
     downsampling_frame_len=60
     downsampling_frame_rate=15
 
