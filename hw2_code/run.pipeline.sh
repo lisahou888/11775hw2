@@ -43,7 +43,8 @@ if [ "$PREPROCESSING" = true ] ; then
     # 1. Downsample videos into shorter clips with lower frame rates.
     # TODO: Make this more efficient through multi-threading f.ex.
     start=`date +%s`
-    for line in $(cat "list/all.video"); do
+    for line in $(cat "list/continue.video"); do
+    # for line in $(cat "list/all.video"); do
         ffmpeg -y -ss 0 -i $video_path/${line}.mp4 -strict experimental -t $downsampling_frame_len -r $downsampling_frame_rate downsampled_videos/$line.ds.mp4
     done
     end=`date +%s`
