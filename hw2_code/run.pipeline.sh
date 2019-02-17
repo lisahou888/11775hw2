@@ -56,7 +56,7 @@ if [ "$PREPROCESSING" = true ] ; then
     # # 3. TODO: Extract CNN features from keyframes of downsampled videos
 	
 
-# fi
+fi
 
 # if [ "$FEATURE_REPRESENTATION" = true ] ; then
 
