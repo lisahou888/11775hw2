@@ -32,10 +32,10 @@ if [ "$PREPROCESSING" = true ] ; then
     echo "#####################################"
 
     # steps only needed once
-    video_path=~/video  # path to the directory containing all the videos.
+    video_path=~/11775_videos/video  # path to the directory containing all the videos.
     mkdir -p list downsampled_videos surf cnn kmeans  # create folders to save features
-    awk '{print $1}' ../hw1_code/list/train > list/train.video  # save only video names in one file (keeping first column)
-    awk '{print $1}' ../hw1_code/list/val > list/val.video
+    awk '{print $1}' /home/ubuntu/11775hw1/hw1_code/list/train > list/train.video  # save only video names in one file (keeping first column)
+    awk '{print $1}' /home/ubuntu/11775hw1/hw1_code/list/val > list/val.video
     cat list/train.video list/val.video list/test.video > list/all.video    #save all video names in one file
     downsampling_frame_len=60
     downsampling_frame_rate=15
@@ -50,95 +50,97 @@ if [ "$PREPROCESSING" = true ] ; then
     runtime=$((end-start))
     echo "Downsampling took: $runtime" #28417 sec around 8h without parallelization
 
-    # 2. TODO: Extract SURF features over keyframes of downsampled videos (0th, 5th, 10th frame, ...)
-    python surf_feat_extraction.py -i list/all.video config.yaml
+    # # 2. TODO: Extract SURF features over keyframes of downsampled videos (0th, 5th, 10th frame, ...)
+    # python surf_feat_extraction.py -i list/all.video config.yaml
 
-    # 3. TODO: Extract CNN features from keyframes of downsampled videos
+    # # 3. TODO: Extract CNN features from keyframes of downsampled videos
 	
 
-fi
+# fi
 
-if [ "$FEATURE_REPRESENTATION" = true ] ; then
+# if [ "$FEATURE_REPRESENTATION" = true ] ; then
 
-    echo "#####################################"
-    echo "#  SURF FEATURE REPRESENTATION      #"
-    echo "#####################################"
+#     echo "#####################################"
+#     echo "#  SURF FEATURE REPRESENTATION      #"
+#     echo "#####################################"
 
-    # 1. TODO: Train kmeans to obtain clusters for SURF features
-
-
-    # 2. TODO: Create kmeans representation for SURF features
-
-	echo "#####################################"
-    echo "#   CNN FEATURE REPRESENTATION      #"
-    echo "#####################################"
-
-	# 1. TODO: Train kmeans to obtain clusters for CNN features
+#     # 1. TODO: Train kmeans to obtain clusters for SURF features
 
 
-    # 2. TODO: Create kmeans representation for CNN features
+#     # 2. TODO: Create kmeans representation for SURF features
 
-fi
+# 	echo "#####################################"
+#     echo "#   CNN FEATURE REPRESENTATION      #"
+#     echo "#####################################"
 
-if [ "$MAP" = true ] ; then
-
-    echo "#######################################"
-    echo "# MED with SURF Features: MAP results #"
-    echo "#######################################"
-
-    # Paths to different tools;
-    map_path=/home/ubuntu/tools/mAP
-    export PATH=$map_path:$PATH
-
-    # 1. TODO: Train SVM with OVR using only videos in training set.
-
-    # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
-
-	# 3. TODO: Train SVM with OVR using videos in training and validation set.
-
-	# 4. TODO: Test SVM with test set saving scores for submission
-
-    echo "#######################################"
-    echo "# MED with CNN Features: MAP results  #"
-    echo "#######################################"
+# 	# 1. TODO: Train kmeans to obtain clusters for CNN features
 
 
-    # 1. TODO: Train SVM with OVR using only videos in training set.
+#     # 2. TODO: Create kmeans representation for CNN features
 
-    # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
+# fi
 
-	# 3. TODO: Train SVM with OVR using videos in training and validation set.
+# if [ "$MAP" = true ] ; then
 
-	# 4. TODO: Test SVM with test set saving scores for submission
+#     echo "#######################################"
+#     echo "# MED with SURF Features: MAP results #"
+#     echo "#######################################"
 
-fi
+#     # Paths to different tools;
+#     map_path=/home/ubuntu/tools/mAP
+#     export PATH=$map_path:$PATH
+
+#     # 1. TODO: Train SVM with OVR using only videos in training set.
+
+#     # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
+
+# 	# 3. TODO: Train SVM with OVR using videos in training and validation set.
+
+# 	# 4. TODO: Test SVM with test set saving scores for submission
+
+#     echo "#######################################"
+#     echo "# MED with CNN Features: MAP results  #"
+#     echo "#######################################"
 
 
-if [ "$KAGGLE" = true ] ; then
+#     # 1. TODO: Train SVM with OVR using only videos in training set.
 
-    echo "##########################################"
-    echo "# MED with SURF Features: KAGGLE results #"
-    echo "##########################################"
+#     # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
 
-    # 1. TODO: Train SVM with OVR using only videos in training set.
+# 	# 3. TODO: Train SVM with OVR using videos in training and validation set.
 
-    # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
+# 	# 4. TODO: Test SVM with test set saving scores for submission
 
-	# 3. TODO: Train SVM with OVR using videos in training and validation set.
-
-    # 4. TODO: Test SVM with test set saving scores for submission
+# fi
 
 
-    echo "##########################################"
-    echo "# MED with CNN Features: KAGGLE results  #"
-    echo "##########################################"
+# if [ "$KAGGLE" = true ] ; then
 
-    # 1. TODO: Train SVM with OVR using only videos in training set.
+#     echo "##########################################"
+#     echo "# MED with SURF Features: KAGGLE results #"
+#     echo "##########################################"
 
-    # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
+#     # 1. TODO: Train SVM with OVR using only videos in training set.
 
-	# 3. TODO: Train SVM with OVR using videos in training and validation set.
+#     # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
 
-	# 4. TODO: Test SVM with test set saving scores for submission
+# 	# 3. TODO: Train SVM with OVR using videos in training and validation set.
 
-fi
+#     # 4. TODO: Test SVM with test set saving scores for submission
+
+
+#     echo "##########################################"
+#     echo "# MED with CNN Features: KAGGLE results  #"
+#     echo "##########################################"
+
+#     # 1. TODO: Train SVM with OVR using only videos in training set.
+
+#     # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
+
+# 	# 3. TODO: Train SVM with OVR using videos in training and validation set.
+
+# 	# 4. TODO: Test SVM with test set saving scores for submission
+
+# fi
+
+echo "Complete!"
