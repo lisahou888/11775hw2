@@ -24,6 +24,8 @@ def get_surf_features_from_video(downsampled_video_filename, surf_feat_video_fil
     for keyframe in get_keyframes(downsampled_video_filename, keyframe_interval):
         key_points, feat = surf.detectAndCompute(keyframe, None)
         print(feat)
+        print(len(feat))
+        print(feat.shape)
         pdb.set_trace()
         feat = np.expand_dims(feat, axis=0)
 
@@ -60,9 +62,13 @@ if __name__ == '__main__':
 
     # Get parameters from config file
     keyframe_interval = my_params.get('keyframe_interval')
+    print('keyframe_interval=' + str(keyframe_interval))
     hessian_threshold = my_params.get('hessian_threshold')
+    print('hessian_threshold=' + str(hessian_threshold))
     surf_features_folderpath = my_params.get('surf_features')
+    print('surf_features_folderpath=' + surf_features_folderpath)
     downsampled_videos = my_params.get('downsampled_videos')
+    print('downsampled_videos=' + downsampled_videos)
 
     # TODO: Create SURF object
     surf = cv2.SURF(hessian_threshold)
