@@ -23,6 +23,7 @@ def get_surf_features_from_video(downsampled_video_filename, surf_feat_video_fil
     surf_feat = []
     for keyframe in get_keyframes(downsampled_video_filename, keyframe_interval):
         key_points, feat = surf.detectAndCompute(keyframe, None)
+        print(feat)
         pdb.set_trace()
         feat = np.expand_dims(feat, axis=0)
 
