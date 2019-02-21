@@ -26,7 +26,7 @@ def get_surf_features_from_video(downsampled_video_filename, surf_feat_video_fil
         print(feat)
         print(len(feat))
         print(feat.shape)
-        pdb.set_trace()
+        # pdb.set_trace()
         feat = np.expand_dims(feat, axis=0)
 
         surf_feat.append(feat)
