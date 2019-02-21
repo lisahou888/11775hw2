@@ -47,6 +47,7 @@ def get_keyframes(downsampled_video_filename, keyframe_interval):
 
 
 if __name__ == '__main__':
+    print(len(sys.argv))
     if len(sys.argv) != 2:
         print("Usage: {0} video_list config_file".format(sys.argv[0]))
         print("video_list -- file containing video names")
