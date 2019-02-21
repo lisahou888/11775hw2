@@ -8,12 +8,26 @@ import numpy as np
 import yaml
 import pickle
 import pdb
+import pandas as pd
 
+
+def sotre_surf_feat(surf_feat, surf_feat_path):
+    # store as a panda compressed csv
+    df = pd.DataFrame.from_records(surf_feat)
+    df.to_csv(surf_feat_path, compression = 'zip', index_label = False)
+    
 
 def get_surf_features_from_video(downsampled_video_filename, surf_feat_video_filename, keyframe_interval):
     "Receives filename of downsampled video and of output path for features. Extracts features in the given keyframe_interval. Saves features in pickled file."
-    # TODO
-    pass
+    
+    surf_feat = []
+    for keyframe in get_keyframes(downsampled_video_filename, keyframe_interval):
+        key_points, feat = surf.detectAndCompute(keyframe, None)
+        pdb.set_trace()
+        feat = np.expand_dims(feat, axis=0)
+
+        surf_feat.append(feat)
+    store_surf_feat(surf_feat, surf_feat_video_filename)
 
 
 def get_keyframes(downsampled_video_filename, keyframe_interval):
@@ -50,6 +64,7 @@ if __name__ == '__main__':
     downsampled_videos = my_params.get('downsampled_videos')
 
     # TODO: Create SURF object
+    surf = cv2.SURF(hessian_threshold)
 
     # Check if folder for SURF features exists
     if not os.path.exists(surf_features_folderpath):
@@ -57,6 +72,13 @@ if __name__ == '__main__':
 
     # Loop over all videos (training, val, testing)
     # TODO: get SURF features for all videos but only from keyframes
+    # for video in os.listdir(downsampled_videos):
+    #     surf_feat_video_filename = video[0:video.find('.')] + '.surf'
+    #     get_surf_features_from_video(video, surf_features_folderpath + '/' + surf_feat_video_filename)
+
+    video = 'HVC1012.ds.mp4'
+    surf_feat_video_filename = video[0:video.find('.')] + '.surf'
+    get_surf_features_from_video(video, surf_features_folderpath + '/' + surf_feat_video_filename)
 
     fread = open(all_video_names, "r")
     for line in fread.readlines():
