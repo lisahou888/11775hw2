@@ -1,2 +1,5 @@
 downsampled_videos/
 frames/
+*.ipynb
+env/
+pictures/
