@@ -76,10 +76,6 @@ if __name__ == '__main__':
     #     surf_feat_video_filename = video[0:video.find('.')] + '.surf'
     #     get_surf_features_from_video(video, surf_features_folderpath + '/' + surf_feat_video_filename)
 
-    video = 'HVC1012.ds.mp4'
-    surf_feat_video_filename = video[0:video.find('.')] + '.surf'
-    get_surf_features_from_video(video, surf_features_folderpath + '/' + surf_feat_video_filename)
-
     fread = open(all_video_names, "r")
     for line in fread.readlines():
         video_name = line.replace('\n', '')
