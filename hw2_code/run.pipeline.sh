@@ -25,79 +25,98 @@ while getopts p:f:m:k:y: option		# p:f:m:k:y: is the optstring here
 
 export PATH=~/anaconda3/bin:$PATH
 
-if [ "$PREPROCESSING" = true ] ; then
+# if [ "$PREPROCESSING" = true ] ; then
 
-    echo "#####################################"
-    echo "#         PREPROCESSING             #"
-    echo "#####################################"
+#     echo "#####################################"
+#     echo "#         PREPROCESSING             #"
+#     echo "#####################################"
 
-    # steps only needed once
-    video_path=~/11775_videos/video  # path to the directory containing all the videos.
-    mkdir -p list downsampled_videos surf cnn kmeans  # create folders to save features
-    # awk '{print $1}' /home/ubuntu/11775hw1/hw1_code/list/train > list/train.video  # save only video names in one file (keeping first column)
-    # awk '{print $1}' /home/ubuntu/11775hw1/hw1_code/list/val > list/val.video
-    # cat list/train.video list/val.video list/test.video > list/all.video    #save all video names in one file
-    downsampling_frame_len=60
-    downsampling_frame_rate=15
+#     # steps only needed once
+#     video_path=~/11775_videos/video  # path to the directory containing all the videos.
+#     mkdir -p list downsampled_videos surf cnn kmeans  # create folders to save features
+#     # awk '{print $1}' /home/ubuntu/11775hw1/hw1_code/list/train > list/train.video  # save only video names in one file (keeping first column)
+#     # awk '{print $1}' /home/ubuntu/11775hw1/hw1_code/list/val > list/val.video
+#     # cat list/train.video list/val.video list/test.video > list/all.video    #save all video names in one file
+#     downsampling_frame_len=60
+#     downsampling_frame_rate=15
 
-    # 1. Downsample videos into shorter clips with lower frame rates.
-    # TODO: Make this more efficient through multi-threading f.ex.
-    start=`date +%s`
-    for line in $(cat "list/continue.video"); do
-    # for line in $(cat "list/all.video"); do
-        ffmpeg -y -ss 0 -i $video_path/${line}.mp4 -strict experimental -t $downsampling_frame_len -r $downsampling_frame_rate downsampled_videos/$line.ds.mp4
-    done
-    end=`date +%s`
-    runtime=$((end-start))
-    echo "Downsampling took: $runtime" #28417 sec around 8h without parallelization
+#     # 1. Downsample videos into shorter clips with lower frame rates.
+#     # TODO: Make this more efficient through multi-threading f.ex.
+#     start=`date +%s`
+#     for line in $(cat "list/continue.video"); do
+#     # for line in $(cat "list/all.video"); do
+#         ffmpeg -y -ss 0 -i $video_path/${line}.mp4 -strict experimental -t $downsampling_frame_len -r $downsampling_frame_rate downsampled_videos/$line.ds.mp4
+#     done
+#     end=`date +%s`
+#     runtime=$((end-start))
+#     echo "Downsampling took: $runtime" #28417 sec around 8h without parallelization
+
 
     # # 2. TODO: Extract SURF features over keyframes of downsampled videos (0th, 5th, 10th frame, ...)
-    # python surf_feat_extraction.py -i list/all.video config.yaml
+    # python surf_feat_extraction.py list/all.video config.yaml
+    python select_surf_feat.py config.yaml
 
-    # # 3. TODO: Extract CNN features from keyframes of downsampled videos
+    # 3. TODO: Extract CNN features from keyframes of downsampled videos
+
+
 	
 
-fi
-
-# if [ "$FEATURE_REPRESENTATION" = true ] ; then
-
-#     echo "#####################################"
-#     echo "#  SURF FEATURE REPRESENTATION      #"
-#     echo "#####################################"
-
-#     # 1. TODO: Train kmeans to obtain clusters for SURF features
-
-
-#     # 2. TODO: Create kmeans representation for SURF features
-
-# 	echo "#####################################"
-#     echo "#   CNN FEATURE REPRESENTATION      #"
-#     echo "#####################################"
-
-# 	# 1. TODO: Train kmeans to obtain clusters for CNN features
-
-
-#     # 2. TODO: Create kmeans representation for CNN features
 
 # fi
 
-# if [ "$MAP" = true ] ; then
+if [ "$FEATURE_REPRESENTATION" = true ] ; then
 
-#     echo "#######################################"
-#     echo "# MED with SURF Features: MAP results #"
-#     echo "#######################################"
+    echo "#####################################"
+    echo "#  SURF FEATURE REPRESENTATION      #"
+    echo "#####################################"
 
-#     # Paths to different tools;
-#     map_path=/home/ubuntu/tools/mAP
-#     export PATH=$map_path:$PATH
+    # 1. TODO: Train kmeans to obtain clusters for SURF features
 
-#     # 1. TODO: Train SVM with OVR using only videos in training set.
 
-#     # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
+    # 2. TODO: Create kmeans representation for SURF features
+    python3 select_surf_feat.py config.yaml
+    python3 train_create_kmeans.py config.yaml
 
-# 	# 3. TODO: Train SVM with OVR using videos in training and validation set.
+	echo "#####################################"
+    echo "#   CNN FEATURE REPRESENTATION      #"
+    echo "#####################################"
 
-# 	# 4. TODO: Test SVM with test set saving scores for submission
+	# 1. TODO: Train kmeans to obtain clusters for CNN features
+
+
+    # 2. TODO: Create kmeans representation for CNN features
+
+fi
+
+if [ "$MAP" = true ] ; then
+
+    echo "#######################################"
+    echo "# MED with SURF Features: MAP results #"
+    echo "#######################################"
+
+    # Paths to different tools;
+    map_path=/home/ubuntu/tools/mAP
+    export PATH=$map_path:$PATH
+
+    mkdir -p surf_pred
+    # iterate over the events
+    feat_dim=50
+    for event in P001 P002 P003; do
+      echo "=========  Event $event  ========="
+      # 1. TODO: Train SVM with OVR using only videos in training set.
+      python3 scripts/train_svm.py $event "kmeans/" $feat_dim surf_pred/svm.$event_train.model surf_pred/svm.$event.model|| exit 1;
+      # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
+      python3 scripts/val_svm.py surf_pred/svm.$event_train.model "kmeans/" $feat_dim surf_pred/${event}_val_surf.lst || exit 1;
+      # 3. TODO: Train SVM with OVR using videos in training and validation set.
+      ap list/${event}_val_label mfcc_pred/${event}_val_surf.lst
+      # 4. TODO: Test SVM with test set saving scores for submission
+      python3 scripts/test_svm.py surf_pred/svm.$event.model "kmeans/" $feat_dim surf_pred/${event}_surf.lst || exit 1;
+    done
+
+
+    
+
+
 
 #     echo "#######################################"
 #     echo "# MED with CNN Features: MAP results  #"
@@ -112,36 +131,38 @@ fi
 
 # 	# 4. TODO: Test SVM with test set saving scores for submission
 
-# fi
+fi
 
 
-# if [ "$KAGGLE" = true ] ; then
+if [ "$KAGGLE" = true ] ; then
 
-#     echo "##########################################"
-#     echo "# MED with SURF Features: KAGGLE results #"
-#     echo "##########################################"
+    echo "##########################################"
+    echo "# MED with SURF Features: KAGGLE results #"
+    echo "##########################################"
 
-#     # 1. TODO: Train SVM with OVR using only videos in training set.
+    # 1. TODO: Train SVM with OVR using only videos in training set.
 
-#     # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
+    # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
 
-# 	# 3. TODO: Train SVM with OVR using videos in training and validation set.
+	# 3. TODO: Train SVM with OVR using videos in training and validation set.
 
-#     # 4. TODO: Test SVM with test set saving scores for submission
+    # 4. TODO: Test SVM with test set saving scores for submission
+    python3 create_kaggle.py surf_pred/ surf_kaggle.csv
 
 
-#     echo "##########################################"
-#     echo "# MED with CNN Features: KAGGLE results  #"
-#     echo "##########################################"
+    # echo "##########################################"
+    # echo "# MED with CNN Features: KAGGLE results  #"
+    # echo "##########################################"
 
-#     # 1. TODO: Train SVM with OVR using only videos in training set.
+    # 1. TODO: Train SVM with OVR using only videos in training set.
 
-#     # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
+    # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
 
-# 	# 3. TODO: Train SVM with OVR using videos in training and validation set.
+	# 3. TODO: Train SVM with OVR using videos in training and validation set.
 
-# 	# 4. TODO: Test SVM with test set saving scores for submission
+	# 4. TODO: Test SVM with test set saving scores for submission
+    # python3 create_kaggle.py cnn_pred/ cnn_kaggle.csv
 
-# fi
+fi
 
 echo "Complete!"

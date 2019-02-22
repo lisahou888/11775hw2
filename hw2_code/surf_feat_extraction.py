@@ -12,13 +12,13 @@ import pandas as pd
 
 no_feat = []
 
-def store_surf_feat(surf_feat, surf_feat_path):
+def store_surf_feat(surf_feat, surf_feat_path, compress_mode):
     # store as a panda compressed csv
     print("Extraction finished, saving...")
     if surf_feat is None:
         return
     df = pd.DataFrame.from_records(surf_feat)
-    df.to_csv(surf_feat_path, compression = 'zip', index_label = False)
+    df.to_csv(surf_feat_path, compression = compress_mode, index_label = False)
     
 
 def get_surf_features_from_video(downsampled_video_filename, surf_feat_video_filename, keyframe_interval):
@@ -41,7 +41,7 @@ def get_surf_features_from_video(downsampled_video_filename, surf_feat_video_fil
         # surf_feat.append(feat)
     if surf_feat is None:
         no_feat.append(downsampled_video_filename)
-    store_surf_feat(surf_feat, surf_feat_video_filename)
+    return surf_feat
 
 
 def get_keyframes(downsampled_video_filename, keyframe_interval):
@@ -76,10 +76,12 @@ if __name__ == '__main__':
     print('keyframe_interval=' + str(keyframe_interval))
     hessian_threshold = my_params.get('hessian_threshold')
     print('hessian_threshold=' + str(hessian_threshold))
-    surf_features_folderpath = my_params.get('surf_features')
+    surf_features_folderpath = my_params.get('surf_path')
     print('surf_features_folderpath=' + surf_features_folderpath)
     downsampled_videos = my_params.get('downsampled_videos')
     print('downsampled_videos=' + downsampled_videos)
+    compress_mode = my_params.get('compress_mode')
+    print('compress_mode=' + compress_mode)
 
     # TODO: Create SURF object
     surf = cv2.SURF(hessian_threshold)
@@ -104,8 +106,9 @@ if __name__ == '__main__':
         print("******************************")
         print(video_name)
         print("******************************")
-        get_surf_features_from_video(downsampled_video_filename,
+        surf_feat = get_surf_features_from_video(downsampled_video_filename,
                                      surf_feat_video_filename, keyframe_interval)
+        store_surf_feat(surf_feat, surf_feat_video_filename, compress_mode)
 
     print("These files don't have features")
     print(no_feat)
