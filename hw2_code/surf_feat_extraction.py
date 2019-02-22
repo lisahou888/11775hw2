@@ -32,7 +32,7 @@ def get_surf_features_from_video(downsampled_video_filename, surf_feat_video_fil
         if len(feat.shape)==1:
             feat = np.expand_dims(feat, axis=0)
 
-        if surf_feat==None:
+        if surf_feat is None:
             surf_feat = feat
         else:
             surf_feat = np.concatenate((surf_feat, feat), axis=0)
