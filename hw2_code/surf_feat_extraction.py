@@ -13,6 +13,7 @@ import pandas as pd
 
 def store_surf_feat(surf_feat, surf_feat_path):
     # store as a panda compressed csv
+    print("saving to compressed csv...")
     if len(surf_feat) == 0:
         return
     df = pd.DataFrame.from_records(surf_feat)
