@@ -53,11 +53,10 @@ export PATH=~/anaconda3/bin:$PATH
 
 
     # # 2. TODO: Extract SURF features over keyframes of downsampled videos (0th, 5th, 10th frame, ...)
-    # python surf_feat_extraction.py list/all.video config.yaml
-    python select_surf_feat.py config.yaml
+    python surf_feat_extraction.py list/all.video config.yaml
 
     # 3. TODO: Extract CNN features from keyframes of downsampled videos
-
+    python cnn_feat_extraction.py list/all.video config.yaml
 
 	
 
@@ -69,22 +68,20 @@ if [ "$FEATURE_REPRESENTATION" = true ] ; then
     echo "#####################################"
     echo "#  SURF FEATURE REPRESENTATION      #"
     echo "#####################################"
-
+    mkdir -p surfkmeans
     # 1. TODO: Train kmeans to obtain clusters for SURF features
-
-
-    # 2. TODO: Create kmeans representation for SURF features
     python3 select_surf_feat.py config.yaml
-    python3 train_create_kmeans.py config.yaml
+    # 2. TODO: Create kmeans representation for SURF features
+    python3 train_create_kmeans.py config.yaml ./surf/select.surf ./surfkmeans surfkmeans.model
 
 	echo "#####################################"
     echo "#   CNN FEATURE REPRESENTATION      #"
     echo "#####################################"
-
+    mkdir -p cnnkmeans
 	# 1. TODO: Train kmeans to obtain clusters for CNN features
-
-
+    python3 cnn_collect_kmeans.py config.yaml
     # 2. TODO: Create kmeans representation for CNN features
+    python3 train_create_kmeans.py config.yaml ./cnn/collect.cnn ./cnnkmeans cnnkmeans.model
 
 fi
 
@@ -104,13 +101,13 @@ if [ "$MAP" = true ] ; then
     for event in P001 P002 P003; do
       echo "=========  Event $event  ========="
       # 1. TODO: Train SVM with OVR using only videos in training set.
-      python3 scripts/train_svm.py $event "kmeans/" $feat_dim surf_pred/svm.$event_train.model surf_pred/svm.$event.model|| exit 1;
+      python3 train_svm.py $event "surfkmeans/" $feat_dim surf_pred/svm.$event_train.model surf_pred/svm.$event.model|| exit 1;
       # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
-      python3 scripts/val_svm.py surf_pred/svm.$event_train.model "kmeans/" $feat_dim surf_pred/${event}_val_surf.lst || exit 1;
+      python3 val_svm.py surf_pred/svm.$event_train.model "surfkmeans/" $feat_dim surf_pred/${event}_val_surf.lst || exit 1;
       # 3. TODO: Train SVM with OVR using videos in training and validation set.
-      ap list/${event}_val_label mfcc_pred/${event}_val_surf.lst
+      ap list/${event}_val_label surf_pred/${event}_val_surf.lst
       # 4. TODO: Test SVM with test set saving scores for submission
-      python3 scripts/test_svm.py surf_pred/svm.$event.model "kmeans/" $feat_dim surf_pred/${event}_surf.lst || exit 1;
+      python3 test_svm.py surf_pred/svm.$event.model "surfkmeans/" $feat_dim surf_pred/${event}_surf.lst || exit 1;
     done
 
 
@@ -121,15 +118,21 @@ if [ "$MAP" = true ] ; then
 #     echo "#######################################"
 #     echo "# MED with CNN Features: MAP results  #"
 #     echo "#######################################"
+    mkdir -p cnn_pred
+    # iterate over the events
+    feat_dim=50
+    for event in P001 P002 P003; do
+      echo "=========  Event $event  ========="
+      # 1. TODO: Train SVM with OVR using only videos in training set.
+      python3 train_svm.py $event "cnnkmeans/" $feat_dim cnn_pred/svm.$event_train.model cnn_pred/svm.$event.model|| exit 1;
+      # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
+      python3 val_svm.py cnn_pred/svm.$event_train.model "cnnkmeans/" $feat_dim cnn_pred/${event}_val_cnn.lst || exit 1;
+      # 3. TODO: Train SVM with OVR using videos in training and validation set.
+      ap list/${event}_val_label cnn_pred/${event}_val_cnn.lst
+      # 4. TODO: Test SVM with test set saving scores for submission
+      python3 test_svm.py cnn_pred/svm.$event.model "cnnkmeans/" $feat_dim cnn_pred/${event}_cnn.lst || exit 1;
+    done
 
-
-#     # 1. TODO: Train SVM with OVR using only videos in training set.
-
-#     # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
-
-# 	# 3. TODO: Train SVM with OVR using videos in training and validation set.
-
-# 	# 4. TODO: Test SVM with test set saving scores for submission
 
 fi
 
@@ -150,9 +153,11 @@ if [ "$KAGGLE" = true ] ; then
     python3 create_kaggle.py surf_pred/ surf_kaggle.csv
 
 
-    # echo "##########################################"
-    # echo "# MED with CNN Features: KAGGLE results  #"
-    # echo "##########################################"
+    echo "##########################################"
+    echo "# MED with CNN Features: KAGGLE results  #"
+    echo "##########################################"
+
+    python3 create_kaggle.py cnn_pred/ cnn_kaggle.csv
 
     # 1. TODO: Train SVM with OVR using only videos in training set.
 

@@ -6,8 +6,8 @@ import sys
 import yaml
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Usage: {0} config_file".format(sys.argv[0]))
+    if len(sys.argv) != 5:
+        print("Usage: {0} config_file selected_feat_path folder kmeans_model".format(sys.argv[0]))
         print("config_file -- yaml filepath containing all parameters")
         exit(1)
 
@@ -17,22 +17,22 @@ if __name__ == '__main__':
 
     all_video_names_path = my_params.get('all_video_names')
     print('all_video_names_path='+all_video_names_path)
-    surf_selected_feat_path = my_params.get('kmeans_selected_surf_path')
-    print('surf_selected_feat_path=' + surf_selected_feat_path)
+    selected_feat_path = argv[2]
+    print('selected_feat_path=' + selected_feat_path)
     surf_path = my_params.get('surf_path')
     print('surf_path=' + surf_path)
     cluster_num = int(my_params.get('kmeans_cluster_num'))
     print('cluster_num=' + str(cluster_num))
     compress_mode = my_params.get('compress_mode')
     print('compress_mode = ' + compress_mode)
-    kmeans_path = my_params.get('kmeans_path')
+    kmeans_path = sys.argv[3]
     print('kmeans_path=' + kmeans_path)
-    kmeans_model = my_params.get('kmeans_model')
+    kmeans_model = sys.argv[4]
     print('kmeans_model=' + kmeans_model)
 
     # train kmeans centers
     print("Importing selected features...")
-    selected_features = pd.read_csv(surf_selected_feat_path, compress=compress_mode).values
+    selected_features = pd.read_csv(selected_feat_path, compress=compress_mode).values
     print("selected features dimensions: ")
     print(selected_features.shape)
     print("Import complete!")
