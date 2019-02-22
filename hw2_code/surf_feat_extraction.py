@@ -11,7 +11,7 @@ import pdb
 import pandas as pd
 
 
-def sotre_surf_feat(surf_feat, surf_feat_path):
+def store_surf_feat(surf_feat, surf_feat_path):
     # store as a panda compressed csv
     df = pd.DataFrame.from_records(surf_feat)
     df.to_csv(surf_feat_path, compression = 'zip', index_label = False)
@@ -28,6 +28,7 @@ def get_surf_features_from_video(downsampled_video_filename, surf_feat_video_fil
         print(feat.shape)
         # pdb.set_trace()
         feat = np.expand_dims(feat, axis=0)
+        print(feat)
 
         surf_feat.append(feat)
     store_surf_feat(surf_feat, surf_feat_video_filename)

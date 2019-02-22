@@ -7,8 +7,8 @@ surf_features: ./surf
 # downsampling
 downsampling_frame_len: 60
 downsampling_frame_rate: 15
-keyframe_interval: 5
+keyframe_interval: 10
 
 # surf
-hessian_threshold: 12000
+hessian_threshold: 400
 kmeans_cluster_num: 256
