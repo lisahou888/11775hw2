@@ -14,7 +14,7 @@ import pandas as pd
 def store_surf_feat(surf_feat, surf_feat_path):
     # store as a panda compressed csv
     print("saving to compressed csv...")
-    if surf_feat == None:
+    if surf_feat is None:
         return
     df = pd.DataFrame.from_records(surf_feat)
     df.to_csv(surf_feat_path, compression = 'zip', index_label = False)
