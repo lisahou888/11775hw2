@@ -10,6 +10,7 @@ import pickle
 import pdb
 import pandas as pd
 
+no_feat = []
 
 def store_surf_feat(surf_feat, surf_feat_path):
     # store as a panda compressed csv
@@ -38,6 +39,8 @@ def get_surf_features_from_video(downsampled_video_filename, surf_feat_video_fil
             surf_feat = np.concatenate((surf_feat, feat), axis=0)
 
         # surf_feat.append(feat)
+    if surf_feat is None:
+        no_feat.append(downsampled_video_filename)
     store_surf_feat(surf_feat, surf_feat_video_filename)
 
 
@@ -104,4 +107,6 @@ if __name__ == '__main__':
         get_surf_features_from_video(downsampled_video_filename,
                                      surf_feat_video_filename, keyframe_interval)
 
+    print("These files don't have features")
+    print(no_feat)
     print("Complete!")
