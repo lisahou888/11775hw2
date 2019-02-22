@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import os
 import sys
 import threading
@@ -9,39 +7,55 @@ import yaml
 import pickle
 import pdb
 import pandas as pd
+import torch
+from PIL import Image
+from torchvision import models, transforms
+import torch.nn as nn
 
-no_feat = []
+normalize = transforms.Normalize(
+    mean=[0.485, 0.456, 0.406],
+    std=[0.229, 0.224, 0.225]
+)
 
-def store_surf_feat(surf_feat, surf_feat_path, compress_mode):
+preprocess = transforms.Compose([
+            transforms.RandomResizedCrop(224),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            normalize,
+])
+
+alexnet = models.alexnet(pretrained=True)
+new_model = nn.Sequential(*list(alexnet.features.children())[:-9])
+
+def store_cnn_feat(cnn_feat, cnn_feat_path, compress_mode):
     # store as a panda compressed csv
     print("Extraction finished, saving...")
-    if surf_feat is None:
+    if cnn_feat is None:
         return
-    df = pd.DataFrame.from_records(surf_feat)
-    df.to_csv(surf_feat_path, compression = compress_mode, index_label = False)
-    
+    df = pd.DataFrame.from_records(cnn_feat)
+    df.to_csv(cnn_feat_path, compression = compress_mode, index_label = False)
 
-def get_surf_features_from_video(downsampled_video_filename, surf_feat_video_filename, keyframe_interval):
+
+def get_cnn_features_from_video(downsampled_video_filename, cnn_feat_video_filename, keyframe_interval):
     "Receives filename of downsampled video and of output path for features. Extracts features in the given keyframe_interval. Saves features in pickled file."
     
-    surf_feat = None
+    cnn_feat = None
     for keyframe in get_keyframes(downsampled_video_filename, keyframe_interval):
-        key_points, feat = surf.detectAndCompute(keyframe, None)
-        if feat is None:
-            continue
-        # pdb.set_trace()
-        if len(feat.shape)==1:
-            feat = np.expand_dims(feat, axis=0)
+        new_img = Image.fromarray(keyframe)
+        img_tensor = preprocess(new_img).unsqueeze_(0)
+        img_variable = torch.autograd.Variable(img_tensor)
+        out = new_model(img_variable)
+        feat = (torch.sum(out, dim=1)/out.shape[1]).squeeze().detach().numpy()
+        feat = np.expand_dims(feat.flatten(),axis=0)
 
-        if surf_feat is None:
-            surf_feat = feat
+        if cnn_feat is None:
+            cnn_feat = feat
         else:
-            surf_feat = np.concatenate((surf_feat, feat), axis=0)
+            cnn_feat = np.concatenate((cnn_feat, feat), axis=0)
 
-        # surf_feat.append(feat)
-    if surf_feat is None:
+    if cnn_feat is None:
         no_feat.append(downsampled_video_filename)
-    return surf_feat
+    return cnn_feat
 
 
 def get_keyframes(downsampled_video_filename, keyframe_interval):
@@ -72,23 +86,19 @@ if __name__ == '__main__':
     my_params = yaml.load(open(config_file))
 
     # Get parameters from config file
-    keyframe_interval = my_params.get('keyframe_interval')
+	keyframe_interval = my_params.get('keyframe_interval')
     print('keyframe_interval=' + str(keyframe_interval))
-    hessian_threshold = my_params.get('hessian_threshold')
-    print('hessian_threshold=' + str(hessian_threshold))
-    surf_features_folderpath = my_params.get('surf_path')
-    print('surf_features_folderpath=' + surf_features_folderpath)
+    cnn_features_folderpath = my_params.get('cnn_path')
+    print('cnn_features_folderpath=' + cnn_features_folderpath)
     downsampled_videos = my_params.get('downsampled_videos')
     print('downsampled_videos=' + downsampled_videos)
     compress_mode = my_params.get('compress_mode')
     print('compress_mode=' + compress_mode)
 
-    # TODO: Create SURF object
-    surf = cv2.SURF(hessian_threshold)
 
     # Check if folder for SURF features exists
-    if not os.path.exists(surf_features_folderpath):
-        os.mkdir(surf_features_folderpath)
+    if not os.path.exists(cnn_features_folderpath):
+        os.mkdir(cnn_features_folderpath)
 
     # Loop over all videos (training, val, testing)
     # TODO: get SURF features for all videos but only from keyframes
@@ -97,7 +107,7 @@ if __name__ == '__main__':
     for line in fread.readlines():
         video_name = line.replace('\n', '')
         downsampled_video_filename = os.path.join(downsampled_videos, video_name + '.ds.mp4')
-        surf_feat_video_filename = os.path.join(surf_features_folderpath, video_name + '.surf')
+        cnn_feat_video_filename = os.path.join(cnn_features_folderpath, video_name + '.cnn')
 
         if not os.path.isfile(downsampled_video_filename):
             continue
@@ -106,9 +116,9 @@ if __name__ == '__main__':
         print("******************************")
         print(video_name)
         print("******************************")
-        surf_feat = get_surf_features_from_video(downsampled_video_filename,
-                                     surf_feat_video_filename, keyframe_interval)
-        store_surf_feat(surf_feat, surf_feat_video_filename, compress_mode)
+        cnn_feat = get_cnn_features_from_video(downsampled_video_filename,
+                                     cnn_feat_video_filename, keyframe_interval)
+        store_cnn_feat(cnn_feat, cnn_feat_video_filename, compress_mode)
 
     print("These files don't have features")
     print(no_feat)
