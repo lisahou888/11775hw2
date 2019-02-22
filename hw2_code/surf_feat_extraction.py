@@ -37,10 +37,7 @@ def get_surf_features_from_video(downsampled_video_filename, surf_feat_video_fil
         else:
             surf_feat = np.concatenate((surf_feat, feat), axis=0)
 
-        print(feat.shape)
         # surf_feat.append(feat)
-    print('Total dimension:')
-    print(surf_feat.shape)
     store_surf_feat(surf_feat, surf_feat_video_filename)
 
 
@@ -90,9 +87,6 @@ if __name__ == '__main__':
 
     # Loop over all videos (training, val, testing)
     # TODO: get SURF features for all videos but only from keyframes
-    # for video in os.listdir(downsampled_videos):
-    #     surf_feat_video_filename = video[0:video.find('.')] + '.surf'
-    #     get_surf_features_from_video(video, surf_features_folderpath + '/' + surf_feat_video_filename)
 
     fread = open(all_video_names, "r")
     for line in fread.readlines():
