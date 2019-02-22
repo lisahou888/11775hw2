@@ -13,7 +13,7 @@ import pandas as pd
 
 def store_surf_feat(surf_feat, surf_feat_path):
     # store as a panda compressed csv
-    print("saving to compressed csv...")
+    print("Extraction finished, saving...")
     if surf_feat is None:
         return
     df = pd.DataFrame.from_records(surf_feat)
@@ -104,5 +104,8 @@ if __name__ == '__main__':
             continue
 
         # Get SURF features for one video
+        print("******************************")
+        print(video_name)
+        print("******************************")
         get_surf_features_from_video(downsampled_video_filename,
                                      surf_feat_video_filename, keyframe_interval)
