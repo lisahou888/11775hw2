@@ -103,3 +103,5 @@ if __name__ == '__main__':
         print("******************************")
         get_surf_features_from_video(downsampled_video_filename,
                                      surf_feat_video_filename, keyframe_interval)
+
+    print("Complete!")
