@@ -14,7 +14,7 @@ import pandas as pd
 def store_surf_feat(surf_feat, surf_feat_path):
     # store as a panda compressed csv
     print("saving to compressed csv...")
-    if len(surf_feat) == 0:
+    if surf_feat == None:
         return
     df = pd.DataFrame.from_records(surf_feat)
     df.to_csv(surf_feat_path, compression = 'zip', index_label = False)
@@ -23,7 +23,7 @@ def store_surf_feat(surf_feat, surf_feat_path):
 def get_surf_features_from_video(downsampled_video_filename, surf_feat_video_filename, keyframe_interval):
     "Receives filename of downsampled video and of output path for features. Extracts features in the given keyframe_interval. Saves features in pickled file."
     
-    surf_feat = []
+    surf_feat = None
     for keyframe in get_keyframes(downsampled_video_filename, keyframe_interval):
         key_points, feat = surf.detectAndCompute(keyframe, None)
         if feat is None:
@@ -32,8 +32,15 @@ def get_surf_features_from_video(downsampled_video_filename, surf_feat_video_fil
         if len(feat.shape)==1:
             feat = np.expand_dims(feat, axis=0)
 
+        if surf_feat==None:
+            surf_feat = feat
+        else:
+            surf_feat = np.concatenate((surf_feat, feat), axis=0)
+
         print(feat.shape)
-        surf_feat.append(feat)
+        # surf_feat.append(feat)
+    print('Total dimension:')
+    print(surf_feat.shape)
     store_surf_feat(surf_feat, surf_feat_video_filename)
 
 
