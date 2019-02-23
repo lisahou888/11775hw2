@@ -20,8 +20,8 @@ if __name__ == '__main__':
     feat_dim = sys.argv[3]
     train_input_path = '../all_trn.lst'
     val_input_path = '../all_val.lst'
-    train_only_model_out = argv[4]
-    model_out = argv[5]
+    train_only_model_out = sys.argv[4]
+    model_out = sys.argv[5]
 
     fread = open(train_input_path, "r")
 
