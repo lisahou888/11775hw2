@@ -71,15 +71,12 @@ if __name__ == '__main__':
             kmeans_features[labels[i]] = kmeans_features[labels[i]] + 1
 
         # writing kmeans features
-        print("Writing kmeans_features for")
-        print(line)
+        print("Writing kmeans_features for " + line + " at " + kmeans_feat_out_path)
         print(kmeans_features)
-        print("path: " + surf_feat_path)
 
-        print("path way: " + kmeans_feat_out_path)
-        # fwrite = open(kmeans_feat_out_path, 'w')
-        # line = str(kmeans_features[0])
-        # for m in range(1, kmeans_features.shape[0]):
-        #     line += ';' + str(kmeans_features[m])
-        # fwrite.write(line + '\n')
-        # fwrite.close()
+        fwrite = open(kmeans_feat_out_path, 'w')
+        line = str(kmeans_features[0])
+        for m in range(1, kmeans_features.shape[0]):
+            line += ';' + str(kmeans_features[m])
+        fwrite.write(line + '\n')
+        fwrite.close()
