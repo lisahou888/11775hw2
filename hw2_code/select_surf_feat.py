@@ -54,7 +54,6 @@ if __name__ == '__main__':
         if total_array is None:
             total_array = array
         else:
-            np.vstack((X, features))
             total_array = np.vstack((total_array, array))
 
         print("total array size: " + str(total_array.shape))

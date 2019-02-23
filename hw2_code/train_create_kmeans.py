@@ -74,9 +74,10 @@ if __name__ == '__main__':
         print(line)
         print(kmeans_features)
 
-        fwrite = open(surf_feat_path, 'w')
-        line = str(kmeans_features[0])
-        for m in range(1, kmeans_features.shape[0]):
-            line += ';' + str(kmeans_features[m])
-        fwrite.write(line + '\n')
-        fwrite.close()
+        print("path way: " + kmeans_feat_out_path)
+        # fwrite = open(kmeans_feat_out_path, 'w')
+        # line = str(kmeans_features[0])
+        # for m in range(1, kmeans_features.shape[0]):
+        #     line += ';' + str(kmeans_features[m])
+        # fwrite.write(line + '\n')
+        # fwrite.close()
