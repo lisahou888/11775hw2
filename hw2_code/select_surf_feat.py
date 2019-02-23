@@ -35,10 +35,10 @@ if __name__ == '__main__':
     total_array = None
 
     for line in fread.readlines():
-        print("***************")
-        print(line)
-        print("***************")
         surf_file = surf_path + '/' + line.replace('\n', '') + ".surf"
+        print("*****************")
+        print(line)
+        print("*****************")
         # exception handling -- surf file might not exist for every video
         if os.path.exists(surf_file) == False:
             print(surf_file + "not found")
@@ -55,7 +55,9 @@ if __name__ == '__main__':
             total_array = array
         else:
             total_array = np.concatenate(total_array, array)
-        print("total_array size: " + str(total_array.shape))
+
+        print("total array size: " + str(total_array.shape))
+    
     fread.close()
 
     # dump the selected features
