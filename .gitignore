@@ -3,3 +3,4 @@ frames/
 *.ipynb
 env/
 pictures/
+surf/
