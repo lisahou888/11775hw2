@@ -2,7 +2,9 @@
 all_video_names: ./list/all.video
 video_path: ~/video
 downsampled_videos: ./downsampled_videos
-surf_features: ./surf
+surf_path: ./surf
+train_video_names: ./list/train.video
+val_video_names: ./list/val.video
 
 # downsampling
 downsampling_frame_len: 60
@@ -10,5 +12,22 @@ downsampling_frame_rate: 15
 keyframe_interval: 10
 
 # surf
-hessian_threshold: 400
-kmeans_cluster_num: 256
+hessian_threshold: 4000
+kmeans_selected_surf_path: ./surf/select.surf
+
+# kmeans
+kmeans_cluster_num: 50
+kmeans_select_ratio: 0.3
+kmeans_path: ./kmeans
+kmeans_model: ./kmeans.model
+
+# cnn
+cnn_path: ./cnn
+kmeans_collected_cnn_path: ./cnn/collect.cnn
+
+# storage
+compress_mode: zip
+
+# svm
+train_input_path: ../all_trn.lst
+validate_input_path: ../all_val.lst
