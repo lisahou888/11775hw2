@@ -26,6 +26,8 @@ if __name__ == '__main__':
     fread = open(train_input_path, "r")
 
     matrix_exist = 0
+    X = None
+    y = None
 
     # read the files one big np matrix
     for line in fread.readlines():
