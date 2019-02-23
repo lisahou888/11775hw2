@@ -53,6 +53,8 @@ if __name__ == '__main__':
         else:
             X = np.vstack((X, features))
             y = np.vstack((y, np.array(label)))
+        print(X)
+        print(y)
 
 
     # start training, class_weight can be tuned
