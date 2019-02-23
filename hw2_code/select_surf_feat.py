@@ -15,6 +15,7 @@ if __name__ == '__main__':
 
 
     all_video_names_path = my_params.get('all_video_names')
+    # all_video_names_path = './list/small.video'
     print('all_video_names_path=' + all_video_names_path)
     surf_path = my_params.get('surf_path')
     print('surf_path=' + surf_path)
@@ -32,6 +33,7 @@ if __name__ == '__main__':
     np.random.seed(18877)
 
     total_array = None
+    num_videos = 0
 
     for line in fread.readlines():
         surf_file = surf_path + '/' + line.replace('\n', '') + ".surf"
@@ -45,6 +47,8 @@ if __name__ == '__main__':
         array = pd.read_csv(surf_file, compression = compress_mode).values
         np.random.shuffle(array)
         select_size = int(array.shape[0] * ratio)
+        if(select_size == 0):
+            continue
         feat_dim = array.shape[1]
 
         array = array[:select_size]
@@ -56,6 +60,12 @@ if __name__ == '__main__':
             total_array = np.vstack((total_array, array))
 
         print("total array size: " + str(total_array.shape))
+        num_videos = num_videos + 1
+        if num_videos % 300 == 0:
+            print("temporarily saving total_array for " + str(num_videos) + " videos")
+            df = pd.DataFrame.from_records(total_array)
+            df.to_csv('./surf/select_' + str(num_videos) + '.surf', compression = compress_mode, index_label = False)
+        print("# video: " + str(num_videos))
     
     fread.close()
 

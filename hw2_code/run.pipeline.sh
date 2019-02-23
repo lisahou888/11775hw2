@@ -97,7 +97,7 @@ if [ "$MAP" = true ] ; then
 
     mkdir -p surf_pred
     # iterate over the events
-    feat_dim=50
+    feat_dim=100
     for event in P001 P002 P003; do
       echo "=========  Event $event  ========="
       # 1. TODO: Train SVM with OVR using only videos in training set.
@@ -120,7 +120,7 @@ if [ "$MAP" = true ] ; then
 # #     echo "#######################################"
 #     mkdir -p cnn_pred
 #     # iterate over the events
-#     feat_dim=50
+#     feat_dim=100
 #     for event in P001 P002 P003; do
 #       echo "=========  Event $event  ========="
 #       # 1. TODO: Train SVM with OVR using only videos in training set.
