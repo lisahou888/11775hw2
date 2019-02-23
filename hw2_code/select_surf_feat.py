@@ -14,8 +14,7 @@ if __name__ == '__main__':
     my_params = yaml.load(open(config_file))
 
 
-    # all_video_names_path = my_params.get('all_video_names')
-    all_video_names_path = './list/small.video'
+    all_video_names_path = my_params.get('all_video_names')
     print('all_video_names_path=' + all_video_names_path)
     surf_path = my_params.get('surf_path')
     print('surf_path=' + surf_path)
@@ -54,7 +53,6 @@ if __name__ == '__main__':
         if total_array is None:
             total_array = array
         else:
-            np.vstack((X, features))
             total_array = np.vstack((total_array, array))
 
         print("total array size: " + str(total_array.shape))
