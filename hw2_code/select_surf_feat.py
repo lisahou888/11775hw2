@@ -14,7 +14,8 @@ if __name__ == '__main__':
     my_params = yaml.load(open(config_file))
 
 
-    all_video_names_path = my_params.get('all_video_names')
+    # all_video_names_path = my_params.get('all_video_names')
+    all_video_names_path = './list/small.video'
     print('all_video_names_path=' + all_video_names_path)
     surf_path = my_params.get('surf_path')
     print('surf_path=' + surf_path)
@@ -38,7 +39,7 @@ if __name__ == '__main__':
         # exception handling -- surf file might not exist for every video
         if os.path.exists(surf_path) == False:
             continue
-        array = pd.read_csv(surf_path, compress = compress_mode).values
+        array = pd.read_csv(surf_path, compression = compress_mode).values
         np.random.shuffle(array)
         select_size = int(array.shape[0] * ratio)
         feat_dim = array.shape[1]
