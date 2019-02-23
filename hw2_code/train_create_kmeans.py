@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from sklearn.cluster import KMeans
 import sys
+import pickle
 import yaml
 
 if __name__ == '__main__':
@@ -17,7 +18,7 @@ if __name__ == '__main__':
 
     all_video_names_path = my_params.get('all_video_names')
     print('all_video_names_path='+all_video_names_path)
-    selected_feat_path = argv[2]
+    selected_feat_path = sys.argv[2]
     print('selected_feat_path=' + selected_feat_path)
     surf_path = my_params.get('surf_path')
     print('surf_path=' + surf_path)
@@ -32,7 +33,7 @@ if __name__ == '__main__':
 
     # train kmeans centers
     print("Importing selected features...")
-    selected_features = pd.read_csv(selected_feat_path, compress=compress_mode).values
+    selected_features = pd.read_csv(selected_feat_path, compression=compress_mode).values
     print("selected features dimensions: ")
     print(selected_features.shape)
     print("Import complete!")
@@ -40,7 +41,7 @@ if __name__ == '__main__':
     # fit kmeans model
     print("Fitting kmeans sklearn...")
     kmeans = KMeans(n_clusters=cluster_num, random_state=0).fit(selected_features)
-    pickle.dump(kmeans open(kmeans_model, 'wb'))
+    pickle.dump(kmeans, open(kmeans_model, 'wb'))
     print("Fitting complete! KMeans Model saved at location: " + kmeans_model)
 
     fread = open(all_video_names_path,"r")
@@ -56,7 +57,7 @@ if __name__ == '__main__':
 
         kmeans_feat_out_path = kmeans_path + '/' + line.replace('\n', '') + ".kmeans"
 
-        surf_features = pd.read_csv(surf_feat_path, compress = compress_mode).values
+        surf_features = pd.read_csv(surf_feat_path, compression = compress_mode).values
 
         print("Printing the surf feature's dimensions...\n\n")
         print(surf_features.shape)
@@ -73,6 +74,7 @@ if __name__ == '__main__':
         print("Writing kmeans_features for")
         print(line)
         print(kmeans_features)
+        print("path: " + surf_feat_path)
 
         print("path way: " + kmeans_feat_out_path)
         # fwrite = open(kmeans_feat_out_path, 'w')
