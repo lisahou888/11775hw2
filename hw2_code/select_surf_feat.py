@@ -35,22 +35,27 @@ if __name__ == '__main__':
     total_array = None
 
     for line in fread.readlines():
-        surf_path = surf_path + '/' + line.replace('\n', '') + ".surf"
+        print("***************")
+        print(line)
+        print("***************")
+        surf_file = surf_path + '/' + line.replace('\n', '') + ".surf"
         # exception handling -- surf file might not exist for every video
-        if os.path.exists(surf_path) == False:
+        if os.path.exists(surf_file) == False:
+            print(surf_file + "not found")
             continue
-        array = pd.read_csv(surf_path, compression = compress_mode).values
+        array = pd.read_csv(surf_file, compression = compress_mode).values
         np.random.shuffle(array)
         select_size = int(array.shape[0] * ratio)
         feat_dim = array.shape[1]
 
         array = array[:select_size]
+        print("selected size: " + str(array.shape))
 
         if total_array is None:
             total_array = array
         else:
             total_array = np.concatenate(total_array, array)
-    
+        print("total_array size: " + str(total_array.shape))
     fread.close()
 
     # dump the selected features
