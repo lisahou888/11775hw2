@@ -79,9 +79,9 @@ if [ "$FEATURE_REPRESENTATION" = true ] ; then
     echo "#####################################"
     mkdir -p cnnkmeans
 	  # 1. TODO: Train kmeans to obtain clusters for CNN features
-    python3 cnn_collect_kmeans.py config.yaml
+    python cnn_collect_kmeans.py config.yaml
     # 2. TODO: Create kmeans representation for CNN features
-    python3 train_create_kmeans.py config.yaml ./cnn/collect.cnn ./cnnkmeans cnnkmeans.model
+    python train_create_kmeans.py config.yaml ./cnn/collect.cnn ./cnnkmeans cnnkmeans.model
 
 fi
 
@@ -124,13 +124,13 @@ if [ "$MAP" = true ] ; then
     for event in P001 P002 P003; do
       echo "=========  Event $event  ========="
       # 1. TODO: Train SVM with OVR using only videos in training set.
-      python3 train_svm.py $event "cnnkmeans/" $feat_dim cnn_pred/svm.${event}_train.model cnn_pred/svm.$event.model|| exit 1;
+      python train_svm.py $event "cnnkmeans/" $feat_dim cnn_pred/svm.${event}_train.model cnn_pred/svm.$event.model|| exit 1;
       # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
-      python3 val_svm.py cnn_pred/svm.${event}_train.model "cnnkmeans/" $feat_dim cnn_pred/${event}_val_cnn.lst || exit 1;
+      python val_svm.py cnn_pred/svm.${event}_train.model "cnnkmeans/" $feat_dim cnn_pred/${event}_val_cnn.lst || exit 1;
       # 3. TODO: Train SVM with OVR using videos in training and validation set.
       ap list/${event}_val_label cnn_pred/${event}_val_cnn.lst
       # 4. TODO: Test SVM with test set saving scores for submission
-      python3 test_svm.py cnn_pred/svm.$event.model "cnnkmeans/" $feat_dim cnn_pred/${event}_cnn.lst || exit 1;
+      python test_svm.py cnn_pred/svm.$event.model "cnnkmeans/" $feat_dim cnn_pred/${event}_cnn.lst || exit 1;
     done
 
 
