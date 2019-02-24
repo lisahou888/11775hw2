@@ -86,7 +86,7 @@ if __name__ == '__main__':
     my_params = yaml.load(open(config_file))
 
     # Get parameters from config file
-	keyframe_interval = my_params.get('keyframe_interval')
+    keyframe_interval = my_params.get('keyframe_interval')
     print('keyframe_interval=' + str(keyframe_interval))
     cnn_features_folderpath = my_params.get('cnn_path')
     print('cnn_features_folderpath=' + cnn_features_folderpath)
