@@ -101,9 +101,9 @@ if [ "$MAP" = true ] ; then
     for event in P001 P002 P003; do
       echo "=========  Event $event  ========="
       # 1. TODO: Train SVM with OVR using only videos in training set.
-      python train_svm.py $event "surfkmeans/" $feat_dim surf_pred/svm.$event_train.model surf_pred/svm.$event.model|| exit 1;
+      python train_svm.py $event "surfkmeans/" $feat_dim surf_pred/svm.${event}_train.model surf_pred/svm.$event.model|| exit 1;
       # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
-      python val_svm.py surf_pred/svm.$event_train.model "surfkmeans/" $feat_dim surf_pred/${event}_val_surf.lst || exit 1;
+      python val_svm.py surf_pred/svm.${event}_train.model "surfkmeans/" $feat_dim surf_pred/${event}_val_surf.lst || exit 1;
       # 3. TODO: Train SVM with OVR using videos in training and validation set.
       ap list/${event}_val_label surf_pred/${event}_val_surf.lst
       # 4. TODO: Test SVM with test set saving scores for submission
@@ -150,7 +150,7 @@ if [ "$KAGGLE" = true ] ; then
 	# 3. TODO: Train SVM with OVR using videos in training and validation set.
 
     # 4. TODO: Test SVM with test set saving scores for submission
-    python create_kaggle.py surf_pred/ surf_kaggle.csv
+    # python create_kaggle.py surf_pred/ surf_kaggle.csv
 
 
     # echo "##########################################"

@@ -36,9 +36,11 @@ if __name__ == '__main__':
         if label != event_name:
             label = 0
         else:
+            print("label == event name")
             label = 1
-        feat_path = feat_dir + line_label[0] + "." + feat_dir.replace('/', '')
+        feat_path = feat_dir + line_label[0] + ".kmeans"
         if os.path.exists(feat_path) == False:
+            print(feat_path + " not found!")
             continue
         feat_lines = open(feat_path, 'r').readlines()
         features = np.asarray([np.array(s.split(";")).astype('float32') for s in feat_lines], dtype=np.float32)
@@ -53,8 +55,6 @@ if __name__ == '__main__':
         else:
             X = np.vstack((X, features))
             y = np.vstack((y, np.array(label)))
-        print(X)
-        print(y)
 
 
     # start training, class_weight can be tuned
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     #     clf = SVC(gamma='scale', probability = True, class_weight = {1:5})
     # else:
     #     clf = SVC(gamma='scale', probability = True, class_weight = {1:10})
-
+    y = np.ravel(y)
     clf.fit(X, y)
     pickle.dump(clf, open(train_only_model_out, 'wb'))
     fread.close()
@@ -101,14 +101,9 @@ if __name__ == '__main__':
     #     clf = SVC(gamma='scale', probability = True, class_weight = {1:5})
     # else:
     #     clf = SVC(gamma='scale', probability = True, class_weight = {1:10})
+    y = np.ravel(y)
     clf.fit(X, y)
     pickle.dump(clf, open(model_out, 'wb'))
     fread.close()
 
     print('SVM trained successfully for event %s with both training and validation sets! ' % (event_name))
-
-
-
-
-
-
