@@ -63,27 +63,27 @@ while getopts p:f:m:k:y: option		# p:f:m:k:y: is the optstring here
 
 # fi
 
-if [ "$FEATURE_REPRESENTATION" = true ] ; then
+# if [ "$FEATURE_REPRESENTATION" = true ] ; then
 
-    echo "#####################################"
-    echo "#  SURF FEATURE REPRESENTATION      #"
-    echo "#####################################"
-    mkdir -p surfkmeans
-    # 1. TODO: Train kmeans to obtain clusters for SURF features
-    python select_surf_feat.py config.yaml
-    # 2. TODO: Create kmeans representation for SURF features
-    python train_create_kmeans.py config.yaml ./surf/select.surf ./surfkmeans surfkmeans.model
+#     echo "#####################################"
+#     echo "#  SURF FEATURE REPRESENTATION      #"
+#     echo "#####################################"
+#     mkdir -p surfkmeans
+#     # 1. TODO: Train kmeans to obtain clusters for SURF features
+#     python select_surf_feat.py config.yaml
+#     # 2. TODO: Create kmeans representation for SURF features
+#     python train_create_kmeans.py config.yaml ./surf/select.surf ./surfkmeans surfkmeans.model
 
-	#   echo "#####################################"
- #    echo "#   CNN FEATURE REPRESENTATION      #"
- #    echo "#####################################"
- #    mkdir -p cnnkmeans
-	# # 1. TODO: Train kmeans to obtain clusters for CNN features
- #    python3 cnn_collect_kmeans.py config.yaml
- #    # 2. TODO: Create kmeans representation for CNN features
- #    python3 train_create_kmeans.py config.yaml ./cnn/collect.cnn ./cnnkmeans cnnkmeans.model
+# 	#   echo "#####################################"
+#  #    echo "#   CNN FEATURE REPRESENTATION      #"
+#  #    echo "#####################################"
+#  #    mkdir -p cnnkmeans
+# 	# # 1. TODO: Train kmeans to obtain clusters for CNN features
+#  #    python3 cnn_collect_kmeans.py config.yaml
+#  #    # 2. TODO: Create kmeans representation for CNN features
+#  #    python3 train_create_kmeans.py config.yaml ./cnn/collect.cnn ./cnnkmeans cnnkmeans.model
 
-fi
+# fi
 
 if [ "$MAP" = true ] ; then
 
