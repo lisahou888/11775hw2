@@ -20,8 +20,8 @@ if __name__ == '__main__':
     print('all_video_names_path='+all_video_names_path)
     selected_feat_path = sys.argv[2]
     print('selected_feat_path=' + selected_feat_path)
-    surf_path = my_params.get('surf_path')
-    print('surf_path=' + surf_path)
+    cnn_path = my_params.get('cnn_path')
+    print('cnn_path=' + cnn_path)
     cluster_num = int(my_params.get('kmeans_cluster_num'))
     print('cluster_num=' + str(cluster_num))
     compress_mode = my_params.get('compress_mode')
@@ -47,9 +47,9 @@ if __name__ == '__main__':
     fread = open(all_video_names_path,"r")
 
     for line in fread.readlines():
-        surf_feat_path = surf_path + '/' + line.replace('\n', '') + ".surf"
-        # exception handling -- surf file might not exist for every video
-        if os.path.exists(surf_feat_path) == False:
+        cnn_feat_path = cnn_path + '/' + line.replace('\n', '') + ".cnn"
+        # exception handling -- cnn file might not exist for every video
+        if os.path.exists(cnn_feat_path) == False:
             continue
 
         if not os.path.exists(kmeans_path):
@@ -57,13 +57,13 @@ if __name__ == '__main__':
 
         kmeans_feat_out_path = kmeans_path + '/' + line.replace('\n', '') + ".kmeans"
 
-        surf_features = pd.read_csv(surf_feat_path, compression = compress_mode).values
+        cnn_features = pd.read_csv(cnn_feat_path, compression = compress_mode).values
 
-        print("Printing the surf feature's dimensions...\n\n")
-        print(surf_features.shape)
+        print("Printing the cnn feature's dimensions...\n\n")
+        print(cnn_features.shape)
 
         # predicting
-        labels = kmeans.predict(surf_features)
+        labels = kmeans.predict(cnn_features)
 
         # creating kmeans features
         kmeans_features = np.zeros(cluster_num)
