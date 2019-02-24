@@ -35,6 +35,7 @@ if __name__ == '__main__':
         cnn_path = cnn_path + '/' + line.replace('\n', '') + ".cnn"
         # exception handling -- cnn file might not exist for every video
         if os.path.exists(cnn_path) == False:
+            print(cnn_path + " not found!")
             continue
         array = pd.read_csv(cnn_path, compression = compress_mode).values
         if total_array is None:
