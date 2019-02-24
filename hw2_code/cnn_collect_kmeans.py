@@ -32,12 +32,12 @@ if __name__ == '__main__':
     num_videos = 0
 
     for line in fread.readlines():
-        cnn_path = cnn_path + '/' + line.replace('\n', '') + ".cnn"
+        cnn_file = cnn_path + '/' + line.replace('\n', '') + ".cnn"
         # exception handling -- cnn file might not exist for every video
-        if os.path.exists(cnn_path) == False:
-            print(cnn_path + " not found!")
+        if os.path.exists(cnn_file) == False:
+            print(cnn_file + " not found!")
             continue
-        array = pd.read_csv(cnn_path, compression = compress_mode).values
+        array = pd.read_csv(cnn_file, compression = compress_mode).values
         if total_array is None:
             total_array = array
         else:
@@ -47,7 +47,7 @@ if __name__ == '__main__':
         if num_videos % 300 == 0:
             print("temporarily saving total_array for " + str(num_videos) + " videos")
             df = pd.DataFrame.from_records(total_array)
-            df.to_csv('./surf/select_' + str(num_videos) + '.surf', compression = compress_mode, index_label = False)
+            df.to_csv('./cnn/collect_' + str(num_videos) + '.cnn', compression = compress_mode, index_label = False)
         print("# video: " + str(num_videos))
     
     fread.close()

@@ -74,7 +74,7 @@ if [ "$FEATURE_REPRESENTATION" = true ] ; then
     # # 2. TODO: Create kmeans representation for SURF features
     # python train_create_kmeans.py config.yaml ./surf/select.surf ./surfkmeans surfkmeans.model
 
-	  echo "#####################################"
+    echo "#####################################"
     echo "#   CNN FEATURE REPRESENTATION      #"
     echo "#####################################"
     mkdir -p cnnkmeans
@@ -115,9 +115,9 @@ if [ "$MAP" = true ] ; then
 
 
 
-#     echo "#######################################"
-#     echo "# MED with CNN Features: MAP results  #"
-#     echo "#######################################"
+    echo "#######################################"
+    echo "# MED with CNN Features: MAP results  #"
+    echo "#######################################"
     mkdir -p cnn_pred
     # iterate over the events
     feat_dim=100
