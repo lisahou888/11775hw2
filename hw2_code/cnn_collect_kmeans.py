@@ -32,11 +32,11 @@ if __name__ == '__main__':
     num_videos = 0
 
     for line in fread.readlines():
-        cnn_path = cnn_path + '/' + line.replace('\n', '') + ".cnn"
+        cnn_file = cnn_path + '/' + line.replace('\n', '') + ".cnn"
         # exception handling -- cnn file might not exist for every video
-        if os.path.exists(cnn_path) == False:
+        if os.path.exists(cnn_file) == False:
             continue
-        array = pd.read_csv(cnn_path, compression = compress_mode).values
+        array = pd.read_csv(cnn_file, compression = compress_mode).values
         if total_array is None:
             total_array = array
         else:
