@@ -87,51 +87,51 @@ while getopts p:f:m:k:y: option		# p:f:m:k:y: is the optstring here
 
 if [ "$MAP" = true ] ; then
 
-    echo "#######################################"
-    echo "# MED with SURF Features: MAP results #"
-    echo "#######################################"
+    # echo "#######################################"
+    # echo "# MED with SURF Features: MAP results #"
+    # echo "#######################################"
 
-    # Paths to different tools;
-    map_path=/home/ubuntu/tools/mAP
-    export PATH=$map_path:$PATH
+    # # Paths to different tools;
+    # map_path=/home/ubuntu/tools/mAP
+    # export PATH=$map_path:$PATH
 
-    mkdir -p surf_pred
-    # iterate over the events
-    feat_dim=300
-    for event in P001 P002 P003; do
-      echo "=========  Event $event  ========="
-      # 1. TODO: Train SVM with OVR using only videos in training set.
-      # python train_svm.py $event "surfkmeans/" $feat_dim surf_pred/svm.${event}_train.model surf_pred/svm.$event.model|| exit 1;
-      # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
-      python val_svm.py surf_pred/svm.${event}_train.model "surfkmeans/" $feat_dim surf_pred/${event}_val_surf.lst || exit 1;
-      # 3. TODO: Train SVM with OVR using videos in training and validation set.
-      ap list/${event}_val_label surf_pred/${event}_val_surf.lst
-      # 4. TODO: Test SVM with test set saving scores for submission
-      python test_svm.py surf_pred/svm.$event.model "surfkmeans/" $feat_dim surf_pred/${event}_surf.lst || exit 1;
-    done
+    # mkdir -p surf_pred
+    # # iterate over the events
+    # feat_dim=300
+    # for event in P001 P002 P003; do
+    #   echo "=========  Event $event  ========="
+    #   # 1. TODO: Train SVM with OVR using only videos in training set.
+    #   # python train_svm.py $event "surfkmeans/" $feat_dim surf_pred/svm.${event}_train.model surf_pred/svm.$event.model|| exit 1;
+    #   # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
+    #   python val_svm.py surf_pred/svm.${event}_train.model "surfkmeans/" $feat_dim surf_pred/${event}_val_surf.lst || exit 1;
+    #   # 3. TODO: Train SVM with OVR using videos in training and validation set.
+    #   ap list/${event}_val_label surf_pred/${event}_val_surf.lst
+    #   # 4. TODO: Test SVM with test set saving scores for submission
+    #   python test_svm.py surf_pred/svm.$event.model "surfkmeans/" $feat_dim surf_pred/${event}_surf.lst || exit 1;
+    # done
 
 
     
 
 
 
-    # echo "#######################################"
-    # echo "# MED with CNN Features: MAP results  #"
-    # echo "#######################################"
-    # mkdir -p cnn_pred
-    # # iterate over the events
-    # feat_dim=100
-    # for event in P001 P002 P003; do
-    #   echo "=========  Event $event  ========="
-    #   # 1. TODO: Train SVM with OVR using only videos in training set.
-    #   python train_svm.py $event "cnnkmeans/" $feat_dim cnn_pred/svm.${event}_train.model cnn_pred/svm.$event.model|| exit 1;
-    #   # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
-    #   python val_svm.py cnn_pred/svm.${event}_train.model "cnnkmeans/" $feat_dim cnn_pred/${event}_val_cnn.lst || exit 1;
-    #   # 3. TODO: Train SVM with OVR using videos in training and validation set.
-    #   ap list/${event}_val_label cnn_pred/${event}_val_cnn.lst
-    #   # 4. TODO: Test SVM with test set saving scores for submission
-    #   python test_svm.py cnn_pred/svm.$event.model "cnnkmeans/" $feat_dim cnn_pred/${event}_cnn.lst || exit 1;
-    # done
+    echo "#######################################"
+    echo "# MED with CNN Features: MAP results  #"
+    echo "#######################################"
+    mkdir -p cnn_pred
+    # iterate over the events
+    feat_dim=100
+    for event in P001 P002 P003; do
+      echo "=========  Event $event  ========="
+      # 1. TODO: Train SVM with OVR using only videos in training set.
+      python train_svm.py $event "cnnkmeans/" $feat_dim cnn_pred/svm.${event}_train.model cnn_pred/svm.$event.model|| exit 1;
+      # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
+      python val_svm.py cnn_pred/svm.${event}_train.model "cnnkmeans/" $feat_dim cnn_pred/${event}_val_cnn.lst || exit 1;
+      # 3. TODO: Train SVM with OVR using videos in training and validation set.
+      ap list/${event}_val_label cnn_pred/${event}_val_cnn.lst
+      # 4. TODO: Test SVM with test set saving scores for submission
+      python test_svm.py cnn_pred/svm.$event.model "cnnkmeans/" $feat_dim cnn_pred/${event}_cnn.lst || exit 1;
+    done
 
 
 fi
