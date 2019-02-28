@@ -26,7 +26,7 @@ preprocess = transforms.Compose([
 
 alexnet = models.alexnet(pretrained=True)
 new_model = nn.Sequential(*list(alexnet.features.children())[:-9])
-
+no_feat = []
 def store_cnn_feat(cnn_feat, cnn_feat_path, compress_mode):
     # store as a panda compressed csv
     print("Extraction finished, saving...")
