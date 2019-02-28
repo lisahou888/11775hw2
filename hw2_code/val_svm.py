@@ -29,6 +29,7 @@ if __name__ == '__main__':
     for line in fread.readlines():
         line_label = line.split(" ")
         feat_path = feat_dir + line_label[0] + "." + feat_dir.replace('/', '')
+        print(feat_path)
         if os.path.exists(feat_path) == False:
             fw.write("0\n")
             continue
