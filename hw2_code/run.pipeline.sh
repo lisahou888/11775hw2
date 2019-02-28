@@ -63,27 +63,27 @@ while getopts p:f:m:k:y: option		# p:f:m:k:y: is the optstring here
 
 # fi
 
-if [ "$FEATURE_REPRESENTATION" = true ] ; then
+# if [ "$FEATURE_REPRESENTATION" = true ] ; then
 
-    echo "#####################################"
-    echo "#  SURF FEATURE REPRESENTATION      #"
-    echo "#####################################"
-    # mkdir -p surfkmeans
-    # # # 1. TODO: Train kmeans to obtain clusters for SURF features
-    # python select_surf_feat.py config.yaml
-    # # # 2. TODO: Create kmeans representation for SURF features
-    python train_create_kmeans.py config.yaml ./surf/select.surf ./surfkmeans surfkmeans.model
+#     echo "#####################################"
+#     echo "#  SURF FEATURE REPRESENTATION      #"
+#     echo "#####################################"
+#     # mkdir -p surfkmeans
+#     # # # 1. TODO: Train kmeans to obtain clusters for SURF features
+#     # python select_surf_feat.py config.yaml
+#     # # # 2. TODO: Create kmeans representation for SURF features
+#     python train_create_kmeans.py config.yaml ./surf/select.surf ./surfkmeans surfkmeans.model
 
-   #  echo "#####################################"
-   #  echo "#   CNN FEATURE REPRESENTATION      #"
-   #  echo "#####################################"
-   #  mkdir -p cnnkmeans
-	  # # 1. TODO: Train kmeans to obtain clusters for CNN features
-   #  # python cnn_collect_kmeans.py config.yaml
-   #  # 2. TODO: Create kmeans representation for CNN features
-   #  python train_create_kmeans.py config.yaml ./cnn/collect.cnn ./cnnkmeans cnnkmeans.model
+#    #  echo "#####################################"
+#    #  echo "#   CNN FEATURE REPRESENTATION      #"
+#    #  echo "#####################################"
+#    #  mkdir -p cnnkmeans
+# 	  # # 1. TODO: Train kmeans to obtain clusters for CNN features
+#    #  # python cnn_collect_kmeans.py config.yaml
+#    #  # 2. TODO: Create kmeans representation for CNN features
+#    #  python train_create_kmeans.py config.yaml ./cnn/collect.cnn ./cnnkmeans cnnkmeans.model
 
-fi
+# fi
 
 if [ "$MAP" = true ] ; then
 
@@ -101,7 +101,7 @@ if [ "$MAP" = true ] ; then
     for event in P001 P002 P003; do
       echo "=========  Event $event  ========="
       # 1. TODO: Train SVM with OVR using only videos in training set.
-      python train_svm.py $event "surfkmeans/" $feat_dim surf_pred/svm.${event}_train.model surf_pred/svm.$event.model|| exit 1;
+      # python train_svm.py $event "surfkmeans/" $feat_dim surf_pred/svm.${event}_train.model surf_pred/svm.$event.model|| exit 1;
       # 2. TODO: Test SVM with val set and calculate its MAP scores for own info.
       python val_svm.py surf_pred/svm.${event}_train.model "surfkmeans/" $feat_dim surf_pred/${event}_val_surf.lst || exit 1;
       # 3. TODO: Train SVM with OVR using videos in training and validation set.
