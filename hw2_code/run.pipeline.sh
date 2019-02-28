@@ -166,7 +166,7 @@ if [ "$KAGGLE" = true ] ; then
 	# 3. TODO: Train SVM with OVR using videos in training and validation set.
 
 	# 4. TODO: Test SVM with test set saving scores for submission
-    python3 create_kaggle.py cnn_pred/ cnn_kaggle.csv cnnkmeans/
+    python create_kaggle.py cnn_pred/ cnn_kaggle.csv cnnkmeans/
 
 fi
 

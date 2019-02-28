@@ -8,7 +8,7 @@ if __name__ == '__main__':
     folder = sys.argv[1]
     output = sys.argv[2]
     kmeans_path = sys.argv[3]
-
+    print(folder + "svm.P001.model")
     clf1 = pickle.load(open(folder + "svm.P001.model", 'rb'))
     clf2 = pickle.load(open(folder + "svm.P002.model", 'rb'))
     clf3 = pickle.load(open(folder + "svm.P003.model", 'rb'))
