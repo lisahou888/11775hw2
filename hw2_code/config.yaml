@@ -17,7 +17,7 @@ kmeans_selected_surf_path: ./surf/select.surf
 
 # kmeans
 kmeans_cluster_num: 300
-kmeans_select_ratio: 0.05
+kmeans_select_ratio: 0.01
 kmeans_path: ./kmeans
 kmeans_model: ./kmeans.model
 
