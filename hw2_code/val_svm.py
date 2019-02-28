@@ -39,6 +39,7 @@ if __name__ == '__main__':
 
         # predicting output
         pred = clf.predict_proba(features)
+        print(pred)
         fw.write(str(pred[0][1]) + "\n")
 
     print('SVM tested successfully for event %s!' % (model_file))
