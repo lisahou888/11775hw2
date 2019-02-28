@@ -20,7 +20,7 @@ if __name__ == '__main__':
     print('all_video_names_path='+all_video_names_path)
     selected_feat_path = sys.argv[2]
     print('selected_feat_path=' + selected_feat_path)
-    cnn_path = my_params.get('cnn_path')
+    cnn_path = my_params.get('surf_path')
     print('cnn_path=' + cnn_path)
     cluster_num = int(my_params.get('kmeans_cluster_num'))
     print('cluster_num=' + str(cluster_num))
@@ -39,15 +39,17 @@ if __name__ == '__main__':
     print("Import complete!")
 
     # fit kmeans model
-    print("Fitting kmeans sklearn...")
-    kmeans = KMeans(n_clusters=cluster_num, random_state=0).fit(selected_features)
-    pickle.dump(kmeans, open(kmeans_model, 'wb'))
-    print("Fitting complete! KMeans Model saved at location: " + kmeans_model)
+    # print("Fitting kmeans sklearn...")
+    print("reading kmeans model...")
+    # kmeans = KMeans(n_clusters=cluster_num, random_state=0).fit(selected_features)
+    kmeans = pickle.load(open(kmeans_file, 'rb'))
+    # pickle.dump(kmeans, open(kmeans_model, 'wb'))
+    # print("Fitting complete! KMeans Model saved at location: " + kmeans_model)
 
     fread = open(all_video_names_path,"r")
 
     for line in fread.readlines():
-        cnn_feat_path = cnn_path + '/' + line.replace('\n', '') + ".cnn"
+        cnn_feat_path = cnn_path + '/' + line.replace('\n', '') + ".surf"
         # exception handling -- cnn file might not exist for every video
         if os.path.exists(cnn_feat_path) == False:
             continue
